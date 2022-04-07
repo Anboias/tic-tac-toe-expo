@@ -1,5 +1,5 @@
 import { SafeAreaView } from "react-native";
-import React, { ReactElement } from "react";
+import React, { useState, ReactElement } from "react";
 import styles from "./single-player-game.style";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StackNavigatorParams } from "@config/navigator";
@@ -19,23 +19,28 @@ type GameProps = {
 
 export default function Game({ navigation }: GameProps): ReactElement {
   // prettier-ignore
-  const b: BoardState = [
-    "o", "o", "x", 
-    "x", "x", null, 
-    "o", "o", 'o'
-  ];
+  const [state, setState] = useState<BoardState>([
+    null, null, null,
+    null, null, null,
+    null, null, null,
+  ]);
 
-  printFormattedBoard(b);
-  console.log(isTerminal(b));
+  const handleOnCellPressed = (cell: number) => {
+    const stateCopy: BoardState = [...state];
+    if (stateCopy[cell] || isTerminal(stateCopy)) return;
+    stateCopy[cell] = "x";
+    setState(stateCopy);
+  };
 
   return (
     <GradientBackground>
       <SafeAreaView style={styles.container}>
         <Board
-          onCellPressed={(index: number) => {
-            alert(index);
+          disabled={!!isTerminal(state)}
+          onCellPressed={cell => {
+            handleOnCellPressed(cell);
           }}
-          state={["x", "o", null, "x", "o", null, "x", "o", null]}
+          state={state}
           size={300}
         />
       </SafeAreaView>
