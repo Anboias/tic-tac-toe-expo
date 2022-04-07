@@ -4,19 +4,29 @@ import styles from "./single-player-game.style";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { StackNavigatorParams } from "@config/navigator";
 import { GradientBackground, Board } from "@components";
-import { printFormattedBoard, isEmpty, isFull, getAvailableMoves, BoardState } from "@utils";
+import {
+  printFormattedBoard,
+  isEmpty,
+  isFull,
+  getAvailableMoves,
+  BoardState,
+  isTerminal
+} from "@utils";
 
 type GameProps = {
   navigation: StackNavigationProp<StackNavigatorParams, "SinglePlayerGame">;
 };
 
 export default function Game({ navigation }: GameProps): ReactElement {
-  const b: BoardState = ["x", "o", null, "x", "o", null, "x", "o", null];
+  // prettier-ignore
+  const b: BoardState = [
+    "o", "o", "x", 
+    "x", "x", null, 
+    "o", "o", 'o'
+  ];
 
   printFormattedBoard(b);
-  console.log(isEmpty(b));
-  console.log(isFull(b));
-  console.log(getAvailableMoves(b));
+  console.log(isTerminal(b));
 
   return (
     <GradientBackground>
